@@ -24,7 +24,7 @@ app.MapPost("/produtos", (Produto produto) =>
    return Results.Created($"/produtos/{novoProduto.Id}", novoProduto);
 });
 
-app.MapPut("/produtos/{int:id}", (int id, Produto produto) =>
+app.MapPut("/produtos/{id:int}", (int id, Produto produto) =>
 {
    var existente = ProdutoRepository.ObterPorId(id);
    if (existente is null) return Results.NotFound();
@@ -34,7 +34,7 @@ app.MapPut("/produtos/{int:id}", (int id, Produto produto) =>
    return Results.Ok(produto);
 });
 
-app.MapDelete("/produtos/{id:int", (int id) =>
+app.MapDelete("/produtos/{id:int}", (int id) =>
 {
    var existente = ProdutoRepository.ObterPorId(id); 
    if (existente is null) return Results.NotFound();
