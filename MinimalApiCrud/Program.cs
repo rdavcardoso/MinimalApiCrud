@@ -3,6 +3,9 @@ using MinimalApiCrud.Models;
 using MinimalApiCrud.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
 app.MapGet("/", () => "API de Produtos Minimal!");
@@ -43,4 +46,6 @@ app.MapDelete("/produtos/{id:int}", (int id) =>
    return Results.NoContent();
 });
 
+app.UseSwagger();
+app.UseSwaggerUI();
 app.Run();
