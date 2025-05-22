@@ -1,0 +1,63 @@
+﻿@using MinimalApiCrud.Client.Services
+@using MinimalApiCrud.Client.Models
+
+@page "/Produtos"
+
+@inject ProdutoService ProdutoService
+
+<h3>Produtos</h3>
+
+@if (produtos == null)
+{
+    <p>Carregando...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var p in produtos)
+        {
+            <tr>
+                <td>@p.Id</td>
+                <td>@p.Nome</td>
+                <td>@p.Preco.ToString("C")</td>
+                <td>
+                    <button class="btn btn-danger" @onclick="() => DeletarProduto(p.Id)">Excluir</button>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+
+    <button class="btn btn-primary" @onclick="AdicionarProduto">Adicionar Produto</button>
+}
+
+@code {
+    private List<Produto>? produtos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        produtos = await ProdutoService.GetProdutosAsync();
+    }
+
+    private async Task DeletarProduto(int id)
+    {
+        await ProdutoService.DeleteProdutoAsync(id);
+        produtos = await ProdutoService.GetProdutosAsync();
+    }
+
+    private async Task AdicionarProduto()
+    {
+        var novoProduto = new Produto { Nome = "Novo Produto", Preco = 10.0m };
+        await ProdutoService.CreateProdutoAsync(novoProduto);
+        produtos = await ProdutoService.GetProdutosAsync();
+    }
+}
